@@ -1,0 +1,88 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="timer">
+        <div class="days">00</div>
+        <div class="divider">:</div>
+        <div class="hours">00</div>
+        <div class="divider">:</div>
+        <div class="minutes">00</div>
+        <div class="divider">:</div>
+        <div class="seconds">00</div>
+    </div>  
+    <button class="btn">Start</button>
+    <style>
+        body{
+            text-align: center;
+        }
+        .timer{
+            display: flex;
+            justify-content: center;
+            font-size: 80px;
+        }
+        .btn{
+            padding: 5px 10px;
+        }   
+    </style>
+    <script>
+        let btn     = document.querySelector('.btn')
+        let days    = document.querySelector('.days');
+        let hours   = document.querySelector('.hours');
+        let minutes = document.querySelector('.minutes');
+        let seconds = document.querySelector('.seconds');
+        let currentDate = localStorage.getItem('startTime');
+        let mySecund1;
+        if (currentDate != null){
+            console.log(1)
+            //автоматически запускаем секундомер если есть данные в local storage
+            mySecund1 =  setInterval(function(){
+                 Secundomer();
+            })
+        }
+        function Secundomer(){        
+            let finishDate  = Date.now();
+            let result      = finishDate - currentDate;         
+            days.textContent    = parseInt(result /1000/ 60 /60 /24);
+            hours.textContent   = parseInt((result /1000/ 60 /60) % 24);
+            minutes.textContent = parseInt((result /1000/ 60) % 60);
+            seconds.textContent = parseInt((result /1000) % 60);
+            if (parseInt((result /1000) % 60)>9){
+                seconds.textContent = parseInt((result /1000) % 60);
+            }else{
+                seconds.textContent ='0' + parseInt((result /1000) % 60);
+            }
+            if (parseInt((result /1000/ 60) % 60) >9){
+                minutes.textContent = parseInt((result /1000/ 60) % 60);
+            }else{
+                minutes.textContent ='0' + parseInt((result /1000/ 60) % 60);
+            }
+            if (parseInt((result /1000/ 60 /60) % 24) >9){
+                hours.textContent = parseInt((result /1000/ 60 /60) % 24);
+            }else{
+                hours.textContent ='0' +  parseInt((result /1000/ 60 /60) % 24);
+            }
+            if (parseInt(result /1000/ 60 /60 /24) >9){
+                days.textContent = parseInt(result /1000/ 60 /60 /24);
+            }else{
+                days.textContent ='0' +  parseInt(result /1000/ 60 /60 /24);
+            }
+        }
+        let mySecund2;
+        btn.addEventListener('click', function(){
+            currentDate = Date.now();
+            localStorage.setItem('startTime', currentDate);
+            clearInterval(mySecund2);
+            clearInterval(mySecund1);
+            //автоматически запускаем секундомер если есть данные в local storage
+            mySecund2 =  setInterval(function(){
+                Secundomer();
+                console.log('test');
+            },1000);
+        });        
+    </script>
+</body>
+</html>
